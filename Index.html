@@ -1,0 +1,190 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Aaliya 💗</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;
+  font-family:Georgia,serif;
+  text-align:center;color:#a12c5c;
+  background:linear-gradient(135deg,#ffe5f0,#ffbad6,#fff1f7);
+  overflow-x:hidden;
+}
+main{padding:30px 16px;position:relative;z-index:2}
+h1{font-size:clamp(36px,10vw,54px);margin:18px 0}
+p{line-height:1.8}
+.card{
+  max-width:440px;margin:25px auto;padding:25px 18px;
+  border-radius:25px;background:#ffffffd9;
+  box-shadow:0 10px 35px #cf4e8040;
+}
+button{
+  background:#e84e8b;color:white;border:0;
+  border-radius:28px;padding:14px 20px;
+  margin:8px;font-size:16px;cursor:pointer;
+}
+#cake{font-size:100px;margin:20px 0}
+.dance{animation:bounce .5s infinite alternate}
+@keyframes bounce{
+  to{transform:translateY(-12px) rotate(4deg)}
+}
+#celebration{display:none}
+#letter{
+  display:none;background:#fff2f8;border-radius:18px;
+  padding:18px;margin-top:20px;text-align:left;
+  line-height:1.9;white-space:pre-line;
+}
+.fall{
+  position:fixed;top:-35px;z-index:5;
+  pointer-events:none;animation:fall linear forwards;
+}
+@keyframes fall{
+  to{transform:translateY(110vh) rotate(500deg);opacity:.15}
+}
+</style>
+</head>
+
+<body>
+<main>
+  <div style="font-size:40px">🎀 💗 🎀</div>
+  <h1>Happy Birthday<br>Aaliya! ❤️</h1>
+  <p>A little surprise made with love, just for you 🌸</p>
+
+  <div class="card">
+    <div id="cake">🎁</div>
+
+    <div id="start">
+      <h2>Someone special has a surprise for you! 💌</h2>
+      <p>Ready for your birthday surprise, Aaliya?</p>
+      <button onclick="celebrate()">Open Your Surprise 🎂</button>
+    </div>
+
+    <div id="celebration">
+      <h2>Make a Wish, Aaliya! ✨</h2>
+      <p>May your day be full of happiness, love and beautiful memories. 💖</p>
+      <div style="font-size:30px">🕯️ 🕯️ 🕯️</div>
+      <button onclick="blowCandles()">Blow the Candles 💨</button>
+
+      <div id="letter">
+        <h2 style="text-align:center">Dear Aaliya 💗</h2>
+
+Happy Birthday, Aaliya! 🎂🌷
+
+You are a very special person, and I hope your
+birthday brings you endless smiles and happiness.
+
+May all your dreams come true. May your life be
+filled with love, success, peace and beautiful
+memories that you will always treasure.
+
+Keep smiling and shining just the way you are.
+You deserve so many wonderful things in life.
+
+Thank you for being such a special part of my life.
+I hope this little surprise makes your birthday
+even more memorable. 🥹❤️
+
+Once again, Happy Birthday, Aaliya! 🎀
+
+With lots of love,
+Mirza ❤️
+        <div style="text-align:center;font-size:30px">🌹💗🌹</div>
+      </div>
+    </div>
+
+    <button onclick="toggleMusic()" id="musicBtn">
+      ♫ Play Birthday Music
+    </button>
+  </div>
+
+  <p>Made with love, especially for Aaliya 💕</p>
+</main>
+
+<script>
+function celebrate(){
+  document.getElementById("cake").textContent="🎂";
+  document.getElementById("cake").classList.add("dance");
+  document.getElementById("start").style.display="none";
+  document.getElementById("celebration").style.display="block";
+  burst();
+}
+
+function blowCandles(){
+  document.getElementById("cake").classList.remove("dance");
+  document.getElementById("cake").textContent="🍰";
+  document.querySelector("#celebration div").textContent="✨ 💖 ✨";
+  document.getElementById("letter").style.display="block";
+  burst();
+  document.getElementById("letter").scrollIntoView({
+    behavior:"smooth",block:"nearest"
+  });
+}
+
+function burst(){
+  const icons=["💗","💕","💖","🌸","🎉","✨","🎊"];
+  for(let i=0;i<45;i++){
+    const el=document.createElement("div");
+    el.className="fall";
+    el.textContent=icons[Math.floor(Math.random()*icons.length)];
+    el.style.left=Math.random()*100+"vw";
+    el.style.fontSize=(18+Math.random()*20)+"px";
+    el.style.animationDuration=(3+Math.random()*4)+"s";
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),7500);
+  }
+}
+
+let audio=null,playing=false,timer=null,index=0;
+
+function toggleMusic(){
+  const btn=document.getElementById("musicBtn");
+
+  if(playing){
+    clearInterval(timer);
+    playing=false;
+    if(audio)audio.suspend();
+    btn.textContent="♫ Play Birthday Music";
+    return;
+  }
+
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC){
+    alert("Music is not supported in this browser.");
+    return;
+  }
+
+  if(!audio)audio=new AC();
+  audio.resume();
+  playing=true;
+  btn.textContent="♫ Pause Music";
+
+  const notes=[523,523,587,523,698,659,523,523,
+               587,523,784,698,523,523,1046,880];
+
+  timer=setInterval(()=>{
+    if(!playing)return;
+    const osc=audio.createOscillator();
+    const gain=audio.createGain();
+
+    osc.type="sine";
+    osc.frequency.value=notes[index%notes.length];
+
+    gain.gain.setValueAtTime(0.0001,audio.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.06,audio.currentTime+0.03);
+    gain.gain.exponentialRampToValueAtTime(0.0001,audio.currentTime+0.32);
+
+    osc.connect(gain);
+    gain.connect(audio.destination);
+    osc.start();
+    osc.stop(audio.currentTime+0.34);
+    index++;
+  },380);
+}
+</script>
+</body>
+</html>
